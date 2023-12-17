@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Collaborative Shopping List</title>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        button {
+            padding: 8px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .remove-btn {
+            margin-left: 5px;
+            padding: 5px 10px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #f44336;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            .remove-btn:hover {
+                background-color: #d32f2f;
+            }
+    </style>
+</head>
+<body>
+    <h1>Shopping List</h1>
+    <div class="container">
+        <input type="text" id="itemInput" placeholder="Enter item" onkeypress="handleKeyPress(event)">
+        <button onclick="addItem()">Add</button>
+        <ul id="shoppingList"></ul>
+    </div>
+
+    <script>// Load existing items from localStorage on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadItems();
+        });
+
+        function addItem() {
+            const itemInput = document.getElementById('itemInput');
+            const itemValue = itemInput.value.trim();
+
+            if (itemValue !== '') {
+                const shoppingList = document.getElementById('shoppingList');
+                const listItem = document.createElement('li');
+                listItem.textContent = itemValue;
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.className = 'remove-btn';
+                removeButton.onclick = function () {
+                    shoppingList.removeChild(listItem);
+                    saveItems();
+                };
+
+                listItem.appendChild(removeButton);
+                shoppingList.appendChild(listItem);
+
+                // Save the updated list to localStorage
+                saveItems();
+
+                itemInput.value = '';
+            }
+        }
+
+        function loadItems() {
+            const shoppingList = document.getElementById('shoppingList');
+            const items = JSON.parse(localStorage.getItem('shoppingItems')) || [];
+
+            items.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = item;
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.className = 'remove-btn';
+                removeButton.onclick = function () {
+                    shoppingList.removeChild(listItem);
+                    saveItems();
+                };
+
+                listItem.appendChild(removeButton);
+                shoppingList.appendChild(listItem);
+            });
+        }
+
+        function saveItems() {
+            const shoppingList = document.getElementById('shoppingList');
+            const items = Array.from(shoppingList.children).map(item => item.textContent.split('Remove')[0].trim());
+            localStorage.setItem('shoppingItems', JSON.stringify(items));
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                addItem();
+            }
+        }</script>
+</body>
+</html>
