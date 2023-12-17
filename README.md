@@ -1,0 +1,1 @@
+# shop7.github.io
