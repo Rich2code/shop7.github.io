@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Photo Gallery</title>
+    <style>
+        /* CSS for the gallery page */
+        /* Adjust styling as needed */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+            .gallery img,
+            .gallery video {
+                width: 200px;
+                height: auto;
+                margin: 5px;
+                border: 1px solid #ccc;
+                padding: 5px;
+            }
+    </style>
+</head>
+<body>
+    <h1>Photo Gallery</h1>
+    <div class="gallery" id="galleryContainer"></div>
+
+    <script>document.addEventListener("DOMContentLoaded", function () {
+            const galleryContainer = document.getElementById('galleryContainer');
+
+            const photoCount = Number(localStorage.getItem('photoCount')) || 0;
+            for (let i = 1; i <= photoCount; i++) {
+                const itemType = localStorage.getItem(`itemType_${i}`);
+                const itemSrc = localStorage.getItem(`itemSrc_${i}`);
+
+                if (itemType === 'photo') {
+                    const img = document.createElement('img');
+                    img.src = itemSrc;
+                    galleryContainer.appendChild(img);
+                } else if (itemType === 'video') {
+                    const video = document.createElement('video');
+                    video.controls = true;
+                    video.src = itemSrc;
+                    galleryContainer.appendChild(video);
+                }
+            }
+        });</script>
+</body>
+</html>
